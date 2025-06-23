@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: warehouse_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: warehouse_db
+      POSTGRES_USER: warehouse_user
+      POSTGRES_PASSWORD: warehouse_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - warehouse_network
+    ports:
+      - "17432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U warehouse_user -d warehouse_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  warehouse:
+    build:
+      context: .
+      dockerfile: Dockerfile # eprepe na to valw sto build giati den evriske gia kapoio logo sto idio directory.
+    image: warehouse:latest
+    container_name: warehouse_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    networks:
+      - warehouse_network
+    volumes:
+      - ./application-docker.yml:/warehouse_test/config/application-docker.yml
+
+volumes:
+  postgres_data:
+
+networks:
+  warehouse_network:
+    driver: bridge

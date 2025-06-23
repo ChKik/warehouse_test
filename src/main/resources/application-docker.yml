@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/warehouse_db
+    username: warehouse_user
+    password: warehouse_pass
+    driver-class-name: org.postgresql.Driver #o driver gia tin Java
+
+  jpa:
+    hibernate:
+      ddl-auto: create #create gia tin arxi mono
+    show-sql: true
