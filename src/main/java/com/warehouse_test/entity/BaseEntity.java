@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //kanei self inc
-    private long id;
+    private Long id;
 
 
     private LocalDateTime createdAt;
