@@ -1,6 +1,9 @@
 package com.warehouse_test.controller;
 
 
+import com.warehouse_test.dto.CreateProductDTO;
+import com.warehouse_test.dto.ProductResponseDTΟ;
+import com.warehouse_test.dto.UpdateProductDTO;
 import com.warehouse_test.entity.Product;
 import com.warehouse_test.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -20,28 +23,28 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> product = productService.getProducts();
+    public ResponseEntity<List<ProductResponseDTΟ>> getAllProducts(){
+        List<ProductResponseDTΟ> product = productService.getProducts();
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable long id){
+    public ResponseEntity<ProductResponseDTΟ> getProductById(@PathVariable long id){
         return productService.getProductById(id)
                 .map(product-> ResponseEntity.ok(product))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        Product createdProduct=productService.createProduct(product);
+    public ResponseEntity<CreateProductDTO> createProduct(@RequestBody CreateProductDTO product){
+        CreateProductDTO createdProduct=productService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable long id, @RequestBody Product product){
+    public ResponseEntity<UpdateProductDTO> updateProduct(@PathVariable long id, @RequestBody UpdateProductDTO product){
         try{
-            Product updatedProduct=productService.updateProduct(id, product);
+            UpdateProductDTO updatedProduct=productService.updateProduct(id, product);
             return ResponseEntity.ok(updatedProduct);
         }catch(Exception e){
             return ResponseEntity.notFound().build();
@@ -62,16 +65,16 @@ public class ProductController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category){
-        List<Product> products = productService.getProductByCategory(category);
+    public ResponseEntity<List<ProductResponseDTΟ>> getProductsByCategory(@PathVariable String category){
+        List<ProductResponseDTΟ> products = productService.getProductByCategory(category);
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productName}")
-    public ResponseEntity<Product> getProductByName(@PathVariable String productName){
-        Product product = productService.getProductsByName(productName).get(0);
+    public ResponseEntity<ProductResponseDTΟ> getProductByName(@PathVariable String productName){
+        ProductResponseDTΟ product = productService.getProductsByName(productName).get(0);
         return ResponseEntity.ok(product);
     }
 
-    // einai kai to weight alla mallon den exei nohma san method telika.
+
 }
